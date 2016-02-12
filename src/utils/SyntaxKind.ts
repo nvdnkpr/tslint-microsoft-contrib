@@ -1170,14 +1170,21 @@ module SyntaxKind {
 
     export function current(): SyntaxKind.SyntaxKind {
         if (cachedKinds == null) {
-            if (/1\.5\..*/.test(ts.version)) {
-                cachedKinds = SyntaxKind_1_5;
-            } else if (/1\.6\..*/.test(ts.version)) {
-                cachedKinds = SyntaxKind_1_6;
-            } else if (/1\.7\..*/.test(ts.version)) {
-                cachedKinds = SyntaxKind_1_7;
+            if (ts.version){
+                if (/1\.5\..*/.test(ts.version)) {
+                    cachedKinds = SyntaxKind_1_5;
+                } else if (/1\.6\..*/.test(ts.version)) {
+                    cachedKinds = SyntaxKind_1_6;
+                } else if (/1\.7\..*/.test(ts.version)) {
+                    cachedKinds = SyntaxKind_1_7;
+                }
             } else {
-                throw new Error('Unsupported TypeScript version: ' + ts.version);
+                if (ts.SyntaxKind !== undefined){
+                    cachedKinds = SyntaxKind;
+                } else {
+                    throw new Error('Unsupported TypeScript version: ' + ts.version);    
+                }
+                
             }
         }
         return cachedKinds;
